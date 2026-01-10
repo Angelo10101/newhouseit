@@ -1,62 +1,177 @@
 import { useLocalSearchParams, router, Stack } from 'expo-router';
-import { StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
-import { useState, useEffect } from 'react';
+import { StyleSheet, ScrollView, TouchableOpacity, Linking, Alert } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-const providerServices = {
+import { IconSymbol } from '@/components/ui/IconSymbol';
+
+// Mock provider data - in a real app, this would come from an API
+const providerDetails = {
   electrician: {
     1: {
       name: 'Lightning Electric Co.',
-      services: [
-        { id: 1, name: 'Outlet Installation', price: 45, description: 'Install new electrical outlet' },
-        { id: 2, name: 'Light Fixture Installation', price: 65, description: 'Install ceiling or wall light fixtures' },
-        { id: 3, name: 'Circuit Breaker Repair', price: 85, description: 'Diagnose and repair circuit breaker issues' },
-        { id: 4, name: 'Electrical Panel Upgrade', price: 350, description: 'Upgrade electrical panel for modern needs' },
-        { id: 5, name: 'Wiring Inspection', price: 120, description: 'Complete electrical wiring safety inspection' },
-      ]
+      rating: 4.8,
+      reviews: 142,
+      distance: '2.3 km',
+      phone: '+27 11 123 4567',
+      email: 'info@lightningelectric.co.za',
+      address: '123 Spark Street, Johannesburg, 2001',
+      website: 'www.lightningelectric.co.za',
+      hours: 'Mon-Fri: 8AM-6PM, Sat: 9AM-2PM',
+      description: 'Professional electrical services with over 20 years of experience. We specialize in residential and commercial electrical installations, repairs, and maintenance.',
+      services: ['Outlet Installation', 'Light Fixture Installation', 'Circuit Breaker Repair', 'Electrical Panel Upgrade', 'Wiring Inspection'],
+    },
+    2: {
+      name: 'PowerUp Services',
+      rating: 4.6,
+      reviews: 89,
+      distance: '3.7 km',
+      phone: '+27 11 234 5678',
+      email: 'contact@powerupservices.co.za',
+      address: '456 Voltage Avenue, Sandton, 2196',
+      website: 'www.powerupservices.co.za',
+      hours: 'Mon-Sat: 7AM-7PM',
+      description: 'Quality electrical work at affordable prices. Fast response time and professional service guaranteed.',
+      services: ['Home Rewiring', 'Emergency Repairs', 'Solar Installation', 'Lighting Design', 'Safety Inspections'],
+    },
+    3: {
+      name: 'Bright Spark Electric',
+      rating: 4.9,
+      reviews: 203,
+      distance: '1.5 km',
+      phone: '+27 11 345 6789',
+      email: 'hello@brightspark.co.za',
+      address: '789 Electric Road, Rosebank, 2196',
+      website: 'www.brightspark.co.za',
+      hours: 'Mon-Fri: 7AM-8PM, Sat-Sun: 8AM-5PM',
+      description: 'Award-winning electrical contractors serving Johannesburg and surrounding areas. We pride ourselves on excellent customer service.',
+      services: ['Complete Rewiring', 'Smart Home Installation', 'Emergency Service', 'Commercial Projects', 'Energy Efficiency Upgrades'],
     }
   },
   plumbing: {
     1: {
       name: 'AquaFix Pro',
-      services: [
-        { id: 1, name: 'Leak Repair', price: 85, description: 'Fix pipe and faucet leaks' },
-        { id: 2, name: 'Drain Cleaning', price: 95, description: 'Clear clogged drains and pipes' },
-        { id: 3, name: 'Toilet Installation', price: 150, description: 'Install new toilet fixture' },
-        { id: 4, name: 'Water Heater Repair', price: 180, description: 'Diagnose and repair water heater issues' },
-        { id: 5, name: 'Pipe Replacement', price: 250, description: 'Replace damaged or old pipes' },
-      ]
+      rating: 4.7,
+      reviews: 156,
+      distance: '2.8 km',
+      phone: '+27 11 456 7890',
+      email: 'service@aquafixpro.co.za',
+      address: '321 Water Lane, Bryanston, 2021',
+      website: 'www.aquafixpro.co.za',
+      hours: 'Mon-Fri: 7AM-7PM, Emergency 24/7',
+      description: 'Expert plumbing services for all your needs. From leak repairs to complete bathroom installations.',
+      services: ['Leak Repair', 'Drain Cleaning', 'Toilet Installation', 'Water Heater Repair', 'Pipe Replacement'],
+    },
+    2: {
+      name: 'Pipeline Masters',
+      rating: 4.5,
+      reviews: 94,
+      distance: '4.2 km',
+      phone: '+27 11 567 8901',
+      email: 'info@pipelinemasters.co.za',
+      address: '654 Flow Street, Randburg, 2194',
+      website: 'www.pipelinemasters.co.za',
+      hours: 'Mon-Sat: 8AM-6PM',
+      description: 'Reliable plumbing solutions with competitive pricing. No job too big or small.',
+      services: ['Burst Pipes', 'Geyser Installation', 'Bathroom Renovation', 'Gas Fitting', 'Drain Unblocking'],
+    },
+    3: {
+      name: 'Flow Control Services',
+      rating: 4.8,
+      reviews: 178,
+      distance: '1.9 km',
+      phone: '+27 11 678 9012',
+      email: 'support@flowcontrol.co.za',
+      address: '987 Plumber Avenue, Hyde Park, 2196',
+      website: 'www.flowcontrol.co.za',
+      hours: 'Mon-Sun: 6AM-10PM',
+      description: 'Your trusted plumbing partner. We offer comprehensive plumbing services with a focus on quality and customer satisfaction.',
+      services: ['Emergency Plumbing', 'Water Filtration', 'Sewer Line Repair', 'Kitchen Plumbing', 'Outdoor Plumbing'],
+    }
+  },
+  roofing: {
+    1: {
+      name: 'TopShield Roofing',
+      rating: 4.9,
+      reviews: 234,
+      distance: '3.4 km',
+      phone: '+27 11 789 0123',
+      email: 'quotes@topshield.co.za',
+      address: '135 Roof Road, Fourways, 2055',
+      website: 'www.topshield.co.za',
+      hours: 'Mon-Fri: 7AM-6PM',
+      description: 'Premium roofing services. From repairs to complete roof replacements, we do it all.',
+      services: ['Roof Repairs', 'Roof Replacement', 'Waterproofing', 'Gutter Installation', 'Roof Inspection'],
+    }
+  },
+  painting: {
+    1: {
+      name: 'ColorCraft Painters',
+      rating: 4.8,
+      reviews: 167,
+      distance: '2.1 km',
+      phone: '+27 11 890 1234',
+      email: 'info@colorcraft.co.za',
+      address: '246 Paint Street, Melville, 2092',
+      website: 'www.colorcraft.co.za',
+      hours: 'Mon-Sat: 8AM-6PM',
+      description: 'Professional painting services for residential and commercial properties. Quality finish guaranteed.',
+      services: ['Interior Painting', 'Exterior Painting', 'Wall Preparation', 'Color Consultation', 'Texture Coating'],
+    }
+  },
+  mechanic: {
+    1: {
+      name: 'Mobile Auto Care',
+      rating: 4.7,
+      reviews: 134,
+      distance: '1.8 km',
+      phone: '+27 11 901 2345',
+      email: 'service@mobileautocare.co.za',
+      address: '357 Motor Way, Parktown, 2193',
+      website: 'www.mobileautocare.co.za',
+      hours: 'Mon-Sat: 7AM-7PM',
+      description: 'Mobile mechanic service that comes to you. Professional vehicle repairs and maintenance at your doorstep.',
+      services: ['Engine Diagnostics', 'Brake Service', 'Oil Change', 'Tire Replacement', 'Battery Replacement'],
+    }
+  },
+  entertainment: {
+    1: {
+      name: 'TechSetup Pro',
+      rating: 4.9,
+      reviews: 198,
+      distance: '2.5 km',
+      phone: '+27 11 012 3456',
+      email: 'bookings@techsetuppro.co.za',
+      address: '468 Tech Avenue, Morningside, 2196',
+      website: 'www.techsetuppro.co.za',
+      hours: 'Mon-Sun: 9AM-8PM',
+      description: 'Expert home entertainment installation and setup. Transform your home into a smart entertainment hub.',
+      services: ['TV Mounting', 'Home Theater Setup', 'Sound System Installation', 'Smart Home Integration', 'Cable Management'],
+    }
+  },
+  interior: {
+    1: {
+      name: 'Design & Style Co.',
+      rating: 4.9,
+      reviews: 267,
+      distance: '3.8 km',
+      phone: '+27 11 123 4567',
+      email: 'design@designstyle.co.za',
+      address: '579 Design Street, Parkview, 2193',
+      website: 'www.designstyle.co.za',
+      hours: 'Mon-Fri: 9AM-6PM, Sat: 10AM-3PM',
+      description: 'Transform your space with our expert interior design services. We bring your vision to life.',
+      services: ['Space Planning', 'Color Schemes', 'Furniture Selection', 'Lighting Design', 'Complete Renovation'],
     }
   }
 };
 
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../../../firebase';
-import { saveCartItem, clearCart, saveRequest, getCartItems } from '../../../services/firestoreService';
-
-export default function ProviderMenuScreen() {
+export default function ProviderDetailScreen() {
   const { serviceId, providerId } = useLocalSearchParams();
-  const [cart, setCart] = useState<{id: number, name: string, price: number, quantity: number}[]>([]);
-  const [user, loading, error] = useAuthState(auth);
 
   const serviceKey = Array.isArray(serviceId) ? serviceId[0] : serviceId;
   const providerKey = Array.isArray(providerId) ? providerId[0] : providerId;
 
-  const provider = providerServices[serviceKey as keyof typeof providerServices]?.[parseInt(providerKey)];
-
-  useEffect(() => {
-    const loadCart = async () => {
-      if (user?.uid) {
-        try {
-          const items = await getCartItems(user.uid);
-          setCart(items);
-        } catch (error) {
-          console.error('Error loading cart:', error);
-        }
-      }
-    };
-    loadCart();
-  }, [user]);
+  const provider = providerDetails[serviceKey as keyof typeof providerDetails]?.[parseInt(providerKey)];
 
   if (!provider) {
     return (
@@ -66,157 +181,141 @@ export default function ProviderMenuScreen() {
     );
   }
 
-  const addToCart = async (service: any) => {
-    if (!user || loading) {
-      Alert.alert('Authentication Required', 'Please log in to add items to cart.');
-      return;
-    }
-
-    if (!user.uid) {
-      Alert.alert('Error', 'User authentication incomplete. Please try logging out and back in.');
-      return;
-    }
-
-    const existingItem = cart.find(item => item.id === service.id);
-    let updatedItem;
-
-    if (existingItem) {
-      updatedItem = { ...existingItem, quantity: existingItem.quantity + 1 };
-      setCart(cart.map(item => 
-        item.id === service.id 
-          ? updatedItem
-          : item
-      ));
-    } else {
-      updatedItem = { ...service, quantity: 1 };
-      setCart([...cart, updatedItem]);
-    }
-
-    try {
-      console.log('Saving cart item for user:', user.uid);
-      await saveCartItem(user.uid, updatedItem);
-      console.log('Cart item saved successfully');
-    } catch (error) {
-      console.error('Cart save error:', error);
-      Alert.alert('Error', `Failed to save item to cart: ${error.message}`);
-
-      // Revert the cart change on error
-      if (existingItem) {
-        setCart(cart.map(item => 
-          item.id === service.id 
-            ? existingItem
-            : item
-        ));
-      } else {
-        setCart(cart.filter(item => item.id !== service.id));
-      }
-    }
+  const handleCall = () => {
+    Linking.openURL(`tel:${provider.phone}`);
   };
 
-  const getTotalPrice = () => {
-    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+  const handleEmail = () => {
+    Linking.openURL(`mailto:${provider.email}`);
   };
 
-  const checkout = async () => {
-    if (!user) {
-      Alert.alert('Login Required', 'Please login to book services', [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Login', onPress: () => router.push('/auth') }
-      ]);
-      return;
-    }
+  const handleWebsite = () => {
+    Linking.openURL(`https://${provider.website}`);
+  };
 
-    if (cart.length === 0) {
-      Alert.alert('Empty Cart', 'Please add services to your cart first');
-      return;
-    }
-
-    try {
-      const requestData = {
-        items: cart,
-        total: getTotalPrice(),
-        totalAmount: getTotalPrice(),
-        providerName: provider.name,
-        serviceType: serviceKey,
-        providerId: providerKey
-      };
-
-      const requestId = await saveRequest(user.uid, requestData);
-      await clearCart(user.uid);
-      setCart([]);
-
-      Alert.alert(
-        'Booking Confirmed!',
-        `Your total is R${getTotalPrice()}. Request ID: ${requestId}. A professional will arrive within the estimated time.`,
-        [
-          {
-            text: 'OK',
-            onPress: () => router.push('/')
-          }
-        ]
-      );
-    } catch (error) {
-      console.error('Checkout error:', error);
-      Alert.alert('Error', 'Failed to process checkout. Please try again.');
-    }
+  const handleDirections = () => {
+    const address = encodeURIComponent(provider.address);
+    Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${address}`);
   };
 
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
       <ThemedView style={styles.container}>
-      <ThemedView style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <ThemedText style={styles.backText}>‹ Back</ThemedText>
-        </TouchableOpacity>
-        <ThemedText type="title" style={styles.title}>{provider.name}</ThemedText>
-        <ThemedText style={styles.subtitle}>Select services you need</ThemedText>
-      </ThemedView>
-
-      <ScrollView style={styles.servicesContainer} showsVerticalScrollIndicator={false}>
-        {provider.services.map((service) => (
-          <ThemedView key={service.id} style={styles.serviceCard} lightColor = "#FFFFFF">
-            <ThemedView style={styles.serviceInfo}>
-              <ThemedText type="defaultSemiBold" style={styles.serviceName}>
-                {service.name}
-              </ThemedText>
-              <ThemedText style={styles.serviceDescription}>
-                {service.description}
-              </ThemedText>
-              <ThemedText style={styles.servicePrice}>
-                R{service.price}
-              </ThemedText>
-            </ThemedView>
-
-            <TouchableOpacity
-              style={styles.addButton}
-              onPress={() => addToCart(service)}
-            >
-              <ThemedText style={styles.addButtonText}>Add</ThemedText>
-            </TouchableOpacity>
-          </ThemedView>
-        ))}
-      </ScrollView>
-
-      {cart.length > 0 && (
-        <ThemedView style={styles.cartContainer}>
-          <ThemedView style={styles.cartHeader}>
-            <ThemedText type="defaultSemiBold" style={styles.cartTitle}>
-              Cart ({cart.length} items)
-            </ThemedText>
-            <ThemedText style={styles.cartTotal}>
-              Total: R{getTotalPrice()}
-            </ThemedText>
-          </ThemedView>
-
-          <TouchableOpacity style={styles.checkoutButton} onPress={checkout}>
-            <ThemedText style={styles.checkoutButtonText}>
-              Book Services - R{getTotalPrice()}
-            </ThemedText>
+        <ThemedView style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <ThemedText style={styles.backText}>‹ Back</ThemedText>
           </TouchableOpacity>
         </ThemedView>
-      )}
-    </ThemedView>
+
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          {/* Business Name and Rating */}
+          <ThemedView style={styles.businessHeader}>
+            <ThemedText type="title" style={styles.businessName}>
+              {provider.name}
+            </ThemedText>
+            <ThemedView style={styles.ratingContainer}>
+              <IconSymbol name="star.fill" size={20} color="#FFB800" />
+              <ThemedText style={styles.rating}>{provider.rating}</ThemedText>
+              <ThemedText style={styles.reviews}>({provider.reviews} reviews)</ThemedText>
+            </ThemedView>
+            <ThemedView style={styles.distanceContainer}>
+              <IconSymbol name="location.fill" size={16} color="#666666" />
+              <ThemedText style={styles.distance}>{provider.distance} away</ThemedText>
+            </ThemedView>
+          </ThemedView>
+
+          {/* Quick Actions */}
+          <ThemedView style={styles.actionsContainer}>
+            <TouchableOpacity style={styles.actionButton} onPress={handleCall}>
+              <IconSymbol name="phone.fill" size={24} color="#000000" />
+              <ThemedText style={styles.actionText}>Call</ThemedText>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionButton} onPress={handleDirections}>
+              <IconSymbol name="map.fill" size={24} color="#000000" />
+              <ThemedText style={styles.actionText}>Directions</ThemedText>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionButton} onPress={handleWebsite}>
+              <IconSymbol name="globe" size={24} color="#000000" />
+              <ThemedText style={styles.actionText}>Website</ThemedText>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionButton} onPress={handleEmail}>
+              <IconSymbol name="envelope.fill" size={24} color="#000000" />
+              <ThemedText style={styles.actionText}>Email</ThemedText>
+            </TouchableOpacity>
+          </ThemedView>
+
+          {/* About */}
+          <ThemedView style={styles.section}>
+            <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
+              About
+            </ThemedText>
+            <ThemedText style={styles.description}>{provider.description}</ThemedText>
+          </ThemedView>
+
+          {/* Address */}
+          <ThemedView style={styles.section}>
+            <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
+              Address
+            </ThemedText>
+            <TouchableOpacity onPress={handleDirections}>
+              <ThemedView style={styles.infoRow}>
+                <IconSymbol name="location.fill" size={18} color="#000000" />
+                <ThemedText style={styles.infoText}>{provider.address}</ThemedText>
+              </ThemedView>
+            </TouchableOpacity>
+          </ThemedView>
+
+          {/* Contact */}
+          <ThemedView style={styles.section}>
+            <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
+              Contact
+            </ThemedText>
+            <TouchableOpacity onPress={handleCall}>
+              <ThemedView style={styles.infoRow}>
+                <IconSymbol name="phone.fill" size={18} color="#000000" />
+                <ThemedText style={styles.infoText}>{provider.phone}</ThemedText>
+              </ThemedView>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleEmail}>
+              <ThemedView style={styles.infoRow}>
+                <IconSymbol name="envelope.fill" size={18} color="#000000" />
+                <ThemedText style={styles.infoText}>{provider.email}</ThemedText>
+              </ThemedView>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleWebsite}>
+              <ThemedView style={styles.infoRow}>
+                <IconSymbol name="globe" size={18} color="#000000" />
+                <ThemedText style={styles.infoText}>{provider.website}</ThemedText>
+              </ThemedView>
+            </TouchableOpacity>
+          </ThemedView>
+
+          {/* Hours */}
+          <ThemedView style={styles.section}>
+            <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
+              Hours
+            </ThemedText>
+            <ThemedView style={styles.infoRow}>
+              <IconSymbol name="clock.fill" size={18} color="#000000" />
+              <ThemedText style={styles.infoText}>{provider.hours}</ThemedText>
+            </ThemedView>
+          </ThemedView>
+
+          {/* Services Offered */}
+          <ThemedView style={styles.section}>
+            <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
+              Services Offered
+            </ThemedText>
+            {provider.services.map((service, index) => (
+              <ThemedView key={index} style={styles.serviceItem}>
+                <ThemedText style={styles.serviceBullet}>•</ThemedText>
+                <ThemedText style={styles.serviceText}>{service}</ThemedText>
+              </ThemedView>
+            ))}
+          </ThemedView>
+        </ScrollView>
+      </ThemedView>
     </>
   );
 }
@@ -240,86 +339,108 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontSize: 18,
   },
-  title: {
-    color: '#000000',
-    marginBottom: 4,
-  },
-  subtitle: {
-    color: '#666666',
-    fontSize: 16,
-  },
-  servicesContainer: {
+  content: {
     flex: 1,
-    padding: 20,
   },
-  serviceCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+  businessHeader: {
     padding: 20,
-    marginBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+    backgroundColor: 'transparent',
+  },
+  businessName: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#000000',
+    marginBottom: 12,
+  },
+  ratingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
+    marginBottom: 8,
+    backgroundColor: 'transparent',
   },
-  serviceInfo: {
-    flex: 1,
-  },
-  serviceName: {
-    fontSize: 18,
-    marginBottom: 6,
+  rating: {
+    fontSize: 16,
+    fontWeight: '600',
     color: '#000000',
+    marginLeft: 6,
+    marginRight: 8,
   },
-  serviceDescription: {
+  reviews: {
     fontSize: 14,
     color: '#666666',
-    marginBottom: 8,
   },
-  servicePrice: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#000000',
-  },
-  addButton: {
-    backgroundColor: '#000000',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
-  },
-  addButtonText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-  },
-  cartContainer: {
-    backgroundColor: '#FFFFFF',
-    padding: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
-  },
-  cartHeader: {
+  distanceContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    backgroundColor: 'transparent',
   },
-  cartTitle: {
-    fontSize: 18,
-    color: '#000000',
+  distance: {
+    fontSize: 14,
+    color: '#666666',
+    marginLeft: 6,
   },
-  cartTotal: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#000000',
+  actionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+    backgroundColor: 'transparent',
   },
-  checkoutButton: {
-    backgroundColor: '#000000',
-    paddingVertical: 16,
-    borderRadius: 12,
+  actionButton: {
     alignItems: 'center',
+    padding: 10,
   },
-  checkoutButtonText: {
-    color: '#FFFFFF',
+  actionText: {
+    fontSize: 12,
+    color: '#000000',
+    marginTop: 6,
+  },
+  section: {
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+    backgroundColor: 'transparent',
+  },
+  sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '600',
+    color: '#000000',
+    marginBottom: 12,
+  },
+  description: {
+    fontSize: 15,
+    color: '#333333',
+    lineHeight: 22,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+    backgroundColor: 'transparent',
+  },
+  infoText: {
+    fontSize: 15,
+    color: '#000000',
+    marginLeft: 12,
+    flex: 1,
+  },
+  serviceItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 8,
+    backgroundColor: 'transparent',
+  },
+  serviceBullet: {
+    fontSize: 16,
+    color: '#000000',
+    marginRight: 8,
+  },
+  serviceText: {
+    fontSize: 15,
+    color: '#333333',
+    flex: 1,
   },
 });
