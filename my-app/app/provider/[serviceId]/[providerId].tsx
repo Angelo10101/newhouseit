@@ -301,7 +301,8 @@ export default function ProviderDetailScreen() {
   const serviceKey = Array.isArray(serviceId) ? serviceId[0] : serviceId;
   const providerKey = Array.isArray(providerId) ? providerId[0] : providerId;
 
-  const provider = providerDetails[serviceKey as keyof typeof providerDetails]?.[parseInt(providerKey)];
+  const serviceProviders = providerDetails[serviceKey as keyof typeof providerDetails];
+  const provider = serviceProviders ? (serviceProviders as any)[parseInt(providerKey)] : null;
 
   if (!provider) {
     return (
@@ -437,7 +438,7 @@ export default function ProviderDetailScreen() {
             <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
               Services Offered
             </ThemedText>
-            {provider.services.map((service, index) => (
+            {provider.services.map((service: string, index: number) => (
               <ThemedView key={index} style={styles.serviceItem}>
                 <ThemedText style={styles.serviceBullet}>•</ThemedText>
                 <ThemedText style={styles.serviceText}>{service}</ThemedText>

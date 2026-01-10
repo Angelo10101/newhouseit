@@ -19,16 +19,15 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={DefaultTheme}>
       <AlertProvider>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="service/[id]" options={{ headerShown: false }} />
           <Stack.Screen name="provider/[serviceId]/[providerId]" options={{ headerShown: false }} />
-          <Stack.Screen name="auth" options={{ headerShown: false, presentation: 'modal' }} />
           <Stack.Screen name="+not-found" options={{ headerShown: false }} />
         </Stack>
-        <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+        <StatusBar style="dark" />
       </AlertProvider>
     </ThemeProvider>
   );
