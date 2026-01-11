@@ -18,6 +18,10 @@ interface UseLocationReturn {
   refreshLocation: () => Promise<void>;
 }
 
+// Configuration constants
+const GEOLOCATION_TIMEOUT_MS = 10000; // 10 seconds
+const GEOLOCATION_MAX_AGE_MS = 60000; // 1 minute cache
+
 /**
  * Custom hook to manage user location using the navigator.geolocation API.
  * 
@@ -42,7 +46,8 @@ export function useLocation(): UseLocationReturn {
     setError(null);
 
     return new Promise((resolve) => {
-      if (!navigator.geolocation) {
+      // Check if geolocation is available
+      if (typeof navigator === 'undefined' || !navigator.geolocation) {
         const err: LocationError = {
           code: 0,
           message: 'Geolocation is not supported by this browser/device',
@@ -75,8 +80,8 @@ export function useLocation(): UseLocationReturn {
         },
         {
           enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 60000, // Cache location for 1 minute
+          timeout: GEOLOCATION_TIMEOUT_MS,
+          maximumAge: GEOLOCATION_MAX_AGE_MS,
         }
       );
     });
