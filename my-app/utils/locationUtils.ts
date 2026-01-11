@@ -26,6 +26,14 @@ export function calculateDistance(
   lat2: number,
   lon2: number
 ): number {
+  // Validate input coordinates
+  if (lat1 < -90 || lat1 > 90 || lat2 < -90 || lat2 > 90) {
+    throw new Error('Latitude values must be between -90 and 90 degrees');
+  }
+  if (lon1 < -180 || lon1 > 180 || lon2 < -180 || lon2 > 180) {
+    throw new Error('Longitude values must be between -180 and 180 degrees');
+  }
+
   const R = 6371; // Radius of the Earth in kilometers
   const dLat = toRadians(lat2 - lat1);
   const dLon = toRadians(lon2 - lon1);
@@ -56,6 +64,11 @@ function toRadians(degrees: number): number {
  * @returns Formatted string (e.g., "2.5 km" or "500 m")
  */
 export function formatDistance(distance: number): string {
+  // Validate input
+  if (typeof distance !== 'number' || isNaN(distance) || distance < 0) {
+    throw new Error('Distance must be a valid positive number');
+  }
+
   if (distance < 1) {
     return `${Math.round(distance * 1000)} m`;
   }
