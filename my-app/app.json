@@ -13,7 +13,9 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.asdfangelo.houseit",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSLocationWhenInUseUsageDescription": "This app needs access to your location to find nearby service providers and calculate distances to businesses.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs access to your location to find nearby service providers and calculate distances to businesses."
       },
       "googleServicesFile": "./GoogleService-Info.plist",
       "config": {
@@ -27,7 +29,11 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
     },
     "web": {
       "bundler": "metro",

@@ -1,11 +1,13 @@
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SafeAreaView, Image, Platform, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
+import { useEffect } from 'react';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { useLocation } from '@/hooks/useLocation';
 
 
 
@@ -21,6 +23,16 @@ const services = [
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
+  const { location, error, loading } = useLocation();
+
+  useEffect(() => {
+    if (location) {
+      console.log('User location updated:', location);
+    }
+    if (error) {
+      console.error('Location error:', error);
+    }
+  }, [location, error]);
 
   const navigateToService = (serviceId: string) => {
     router.push(`/service/${serviceId}`);
