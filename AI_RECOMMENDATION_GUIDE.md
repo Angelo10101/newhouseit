@@ -199,6 +199,10 @@ The business list is dynamically generated from the app's provider data, ensurin
 - Verify backend URL in `useBusinessRecommendation.ts` matches your backend
 - For mobile testing, use your computer's IP address instead of `localhost`
 - Example: `http://192.168.1.100:3001`
+- To find your IP:
+  - Mac/Linux: Run `ifconfig | grep "inet "`
+  - Windows: Run `ipconfig` and look for IPv4 Address
+- Make sure your phone and computer are on the same network
 
 ## Future Enhancements
 

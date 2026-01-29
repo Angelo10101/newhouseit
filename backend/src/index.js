@@ -7,7 +7,7 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 // Middleware
-app.use(cors());
+app.use(cors()); // Note: In production, configure CORS to restrict origins
 app.use(express.json());
 
 // Initialize Gemini AI
@@ -30,10 +30,23 @@ app.post('/api/recommend-business', async (req, res) => {
       });
     }
 
-    // Verify API key is configured
+    // Validate userProblem length
+    if (typeof userProblem !== 'string' || userProblem.length > 1000) {
+      return res.status(400).json({ 
+        error: 'User problem must be a string with maximum 1000 characters.' 
+      });
+    }
+
+    // Verify API key is configured and not placeholder
     if (!process.env.GEMINI_API_KEY) {
       return res.status(500).json({ 
         error: 'Server configuration error: GEMINI_API_KEY not set' 
+      });
+    }
+
+    if (process.env.GEMINI_API_KEY === 'your_api_key_here') {
+      return res.status(500).json({ 
+        error: 'Server configuration error: Please update GEMINI_API_KEY in .env file with your actual API key' 
       });
     }
 
@@ -78,10 +91,9 @@ Respond with ONLY the JSON object, no additional text.`;
         recommendation = JSON.parse(text);
       }
     } catch (parseError) {
-      console.error('Failed to parse Gemini response:', text);
+      console.error('Failed to parse Gemini response');
       return res.status(500).json({ 
-        error: 'Failed to parse AI response',
-        details: text 
+        error: 'Failed to parse AI response. Please try again.'
       });
     }
 
@@ -90,8 +102,7 @@ Respond with ONLY the JSON object, no additional text.`;
         recommendation.confidence === undefined || 
         !recommendation.reason) {
       return res.status(500).json({ 
-        error: 'Invalid AI response format',
-        details: recommendation 
+        error: 'Invalid recommendation format received. Please try again.'
       });
     }
 

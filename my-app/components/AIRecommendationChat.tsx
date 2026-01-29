@@ -51,12 +51,15 @@ export const AIRecommendationChat: React.FC<AIRecommendationChatProps> = ({
 
   const handleViewBusiness = () => {
     if (recommendation && recommendation.businessId !== 'NO_MATCH') {
-      onClose();
       // Navigate to the business detail page based on the business ID
       // The businessId format should be "category-providerId"
       const [category, providerId] = recommendation.businessId.split('-');
       if (category && providerId) {
+        onClose();
+        handleReset();
         router.push(`/provider/${category}/${providerId}`);
+      } else {
+        console.error('Invalid business ID format:', recommendation.businessId);
       }
     }
   };
@@ -66,12 +69,17 @@ export const AIRecommendationChat: React.FC<AIRecommendationChatProps> = ({
     setUserInput('');
   };
 
+  const handleClose = () => {
+    handleReset();
+    onClose();
+  };
+
   return (
     <Modal
       visible={visible}
       animationType="slide"
       transparent={true}
-      onRequestClose={onClose}
+      onRequestClose={handleClose}
     >
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -83,7 +91,7 @@ export const AIRecommendationChat: React.FC<AIRecommendationChatProps> = ({
             <ThemedText type="title" style={styles.headerTitle}>
               AI Assistant
             </ThemedText>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+            <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
               <IconSymbol name="xmark.circle.fill" size={28} color="#666666" />
             </TouchableOpacity>
           </View>

@@ -1,7 +1,7 @@
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SafeAreaView, Image, Platform, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
@@ -80,8 +80,8 @@ export default function HomeScreen() {
     router.push(`/service/${serviceId}`);
   };
 
-  // Prepare businesses list for AI recommendations
-  const getAllBusinesses = (): Business[] => {
+  // Prepare businesses list for AI recommendations (memoized to avoid recalculation on every render)
+  const allBusinesses = useMemo((): Business[] => {
     const businesses: Business[] = [];
     
     Object.entries(serviceProviders).forEach(([category, providers]) => {
@@ -96,7 +96,7 @@ export default function HomeScreen() {
     });
     
     return businesses;
-  };
+  }, []); // Empty dependency array since serviceProviders is static
 
   return (
   <>
@@ -152,7 +152,7 @@ export default function HomeScreen() {
 
     {/* AI Chatbot Floating Button */}
     <TouchableOpacity
-      style={styles.floatingButton}
+      style={[styles.floatingButton, { bottom: 30 + insets.bottom }]}
       onPress={() => setChatVisible(true)}
     >
       <IconSymbol name="brain" size={28} color="#FFFFFF" />
@@ -162,7 +162,7 @@ export default function HomeScreen() {
     <AIRecommendationChat
       visible={chatVisible}
       onClose={() => setChatVisible(false)}
-      businesses={getAllBusinesses()}
+      businesses={allBusinesses}
     />
   </>
 );

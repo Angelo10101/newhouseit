@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
 // Backend API URL - in production, this should be configurable
+// For physical device testing, replace localhost with your computer's IP address
+// Example: const API_URL = 'http://192.168.1.100:3001';
 const API_URL = 'http://localhost:3001';
 
 export interface Business {
