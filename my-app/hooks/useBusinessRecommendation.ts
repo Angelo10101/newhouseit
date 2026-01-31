@@ -1,9 +1,9 @@
 import { useState } from 'react';
+import { config } from '@/config';
 
-// Backend API URL - in production, this should be configurable
-// For physical device testing, replace localhost with your computer's IP address
-// Example: const API_URL = 'http://192.168.1.100:3001';
-const API_URL = 'http://localhost:3001';
+// Backend API URL is now configured via environment variables
+// See .env file and config/index.ts for configuration
+const API_URL = config.apiUrl;
 
 export interface Business {
   id: string;
