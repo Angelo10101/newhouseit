@@ -15,6 +15,8 @@ A React Native mobile app built with Expo that helps users find local service pr
 
 This app includes an intelligent AI assistant powered by Google Gemini that helps users find the right business for their specific needs. Simply describe your problem (e.g., "My lights keep flickering"), and the AI will recommend the best-matched business from the available providers.
 
+**⚠️ IMPORTANT**: The AI chatbot requires proper backend setup. If you get "internal server error", see [CHATBOT_TROUBLESHOOTING.md](CHATBOT_TROUBLESHOOTING.md)
+
 See [AI_RECOMMENDATION_GUIDE.md](AI_RECOMMENDATION_GUIDE.md) for detailed setup and usage instructions.
 
 ## Getting Started
@@ -62,6 +64,22 @@ See [AI_RECOMMENDATION_GUIDE.md](AI_RECOMMENDATION_GUIDE.md) for detailed setup 
 - **iOS Simulator**: Press `i` in the terminal after starting the dev server
 - **Android Emulator**: Press `a` in the terminal after starting the dev server
 - **Physical Device**: Scan the QR code with Expo Go app
+
+### Troubleshooting
+
+**🔥 Chatbot not working? Getting "internal server error"?**
+
+Run this verification script:
+```bash
+./verify-chatbot-setup.sh
+```
+
+Most common issues:
+1. ❌ Backend dependencies not installed → Run: `cd backend && npm install`
+2. ❌ Backend .env file missing → Run: `cd backend && cp .env.example .env` then add your API key
+3. ❌ Backend not running → Run: `cd backend && npm start` (keep it running)
+
+For detailed troubleshooting, see [CHATBOT_TROUBLESHOOTING.md](CHATBOT_TROUBLESHOOTING.md)
 
 ## Project Structure
 

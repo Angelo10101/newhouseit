@@ -1,5 +1,18 @@
 # Quick Start Guide - AI Business Recommendation
 
+## ⚠️ Common Issue: "Internal Server Error" on Chatbot
+
+If the chatbot gives you an error, it's usually because:
+1. Backend dependencies aren't installed (`npm install` in backend folder)
+2. Backend .env file isn't configured (need to copy .env.example and add API key)
+3. Backend server isn't running
+
+**Quick fix:** Run `./verify-chatbot-setup.sh` from the project root to check your setup!
+
+For detailed troubleshooting, see [CHATBOT_TROUBLESHOOTING.md](CHATBOT_TROUBLESHOOTING.md)
+
+---
+
 ## For Users Who Want to Try It Immediately
 
 ### Step 1: Get Your Gemini API Key (Free)
