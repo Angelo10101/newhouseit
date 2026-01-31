@@ -133,6 +133,13 @@ This means the app can't connect to your backend server. Check:
 - Make sure you replaced `your_api_key_here` with your actual key
 - Restart the backend server after editing `.env`
 
+### "Internal server error" or "404 Not Found" with Gemini API
+If you see errors like `models/gemini-1.5-flash is not found for API version v1beta`, this means:
+- The model name in the code might not be available in your region or for your API key
+- The app uses `gemini-1.5-pro` which is widely supported
+- Make sure your API key is valid and active
+- If you still get errors, try generating a new API key at [Google AI Studio](https://makersuite.google.com/app/apikey)
+
 ### Backend won't start - "Port 3001 already in use"
 - Another app is using port 3001
 - Change the port in `backend/.env`:
