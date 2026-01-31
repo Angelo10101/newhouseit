@@ -1,14 +1,21 @@
 # House It - Local Services Directory
 
-A React Native mobile app built with Expo that helps users find local service providers in their area. The app provides a Google-style business directory experience for home services.
+A React Native mobile app built with Expo that helps users find local service providers in their area. The app provides a Google-style business directory experience for home services with AI-powered recommendations.
 
 ## Features
 
 - Browse service categories (Electricians, Plumbers, Roofing, Painting, Mechanics, Entertainment, Interior Design)
+- **🤖 AI-Powered Business Recommendations**: Describe your problem and get instant AI recommendations
 - View detailed business information including ratings, reviews, and contact details
 - Direct actions: Call, Email, Get Directions, Visit Website
 - Clean, simple interface with no login required
 - Google Maps integration for directions
+
+## AI Recommendation Feature
+
+This app includes an intelligent AI assistant powered by Google Gemini that helps users find the right business for their specific needs. Simply describe your problem (e.g., "My lights keep flickering"), and the AI will recommend the best-matched business from the available providers.
+
+See [AI_RECOMMENDATION_GUIDE.md](AI_RECOMMENDATION_GUIDE.md) for detailed setup and usage instructions.
 
 ## Getting Started
 
@@ -17,19 +24,35 @@ A React Native mobile app built with Expo that helps users find local service pr
 - Node.js (v16 or higher)
 - npm or yarn
 - Expo CLI (`npm install -g expo-cli`)
+- Google Gemini API key (for AI recommendations)
 
 ### Installation
 
 1. Clone the repository
-2. Navigate to the my-app directory:
+
+2. **Set up the backend** (for AI recommendations):
+   ```bash
+   cd backend
+   npm install
+   cp .env.example .env
+   # Add your GEMINI_API_KEY to .env file
+   npm start
+   ```
+   
+   The backend will run on `http://localhost:3001`
+
+3. **Set up the mobile app**:
+   Navigate to the my-app directory:
    ```bash
    cd my-app
    ```
-3. Install dependencies:
+   
+4. Install dependencies:
    ```bash
    npm install
    ```
-4. Start the development server:
+   
+5. Start the development server:
    ```bash
    npm start
    ```
