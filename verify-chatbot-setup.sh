@@ -8,6 +8,7 @@ echo "=================================="
 echo ""
 
 BACKEND_DIR="backend"
+PLACEHOLDER_API_KEY="your_api_key_here"
 ERRORS=0
 WARNINGS=0
 
@@ -39,9 +40,9 @@ else
     echo "✅ .env file exists"
     
     # Check 4: API key is configured
-    if grep -q "your_api_key_here" "$BACKEND_DIR/.env"; then
+    if grep -q "$PLACEHOLDER_API_KEY" "$BACKEND_DIR/.env"; then
         echo "⚠️  WARNING: .env file still contains placeholder"
-        echo "   Edit backend/.env and replace 'your_api_key_here' with your actual Gemini API key"
+        echo "   Edit backend/.env and replace '$PLACEHOLDER_API_KEY' with your actual Gemini API key"
         echo "   Get one at: https://makersuite.google.com/app/apikey"
         ((WARNINGS++))
     else
