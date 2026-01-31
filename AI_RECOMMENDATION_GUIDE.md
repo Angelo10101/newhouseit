@@ -4,14 +4,14 @@ This document describes the AI-powered business recommendation feature for the N
 
 ## Overview
 
-The AI recommendation feature uses Google Gemini 1.5 Flash to help users find the best business for their specific problem. Users describe their issue in natural language, and the AI recommends the most suitable business from the available providers.
+The AI recommendation feature uses Google Gemini 1.5 Pro to help users find the best business for their specific problem. Users describe their issue in natural language, and the AI recommends the most suitable business from the available providers.
 
 ## Architecture
 
 ### Backend (Express Server)
 - **Location**: `/backend`
 - **Technology**: Node.js with Express
-- **AI Provider**: Google Gemini 1.5 Flash API
+- **AI Provider**: Google Gemini 1.5 Pro API
 - **Security**: API key stored server-side only in `.env` file
 
 ### Frontend (React Native with Expo)
