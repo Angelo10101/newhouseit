@@ -30,6 +30,7 @@ const serviceProviders = {
     { id: 1, name: 'Mobile Auto Care', rating: 4.7, reviews: 134, eta: '45-75 min', price: 'R85/hr' },
     { id: 2, name: 'DriveRight Services', rating: 4.6, reviews: 87, eta: '60-90 min', price: 'R75/hr' },
     { id: 3, name: 'OnSite Auto Repair', rating: 4.8, reviews: 156, eta: '30-60 min', price: 'R90/hr' },
+    { id: 4, name: 'D.A.S. Auto Edenvale', rating: 4.7, reviews: 92, eta: '40-70 min', price: 'R80/hr' },
   ],
   entertainment: [
     { id: 1, name: 'TechSetup Pro', rating: 4.9, reviews: 198, eta: '60-120 min', price: 'R100/hr' },

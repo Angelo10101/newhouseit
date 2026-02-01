@@ -209,6 +209,19 @@ const providerDetails = {
       hours: 'Mon-Sun: 7AM-8PM',
       description: 'On-site vehicle repairs and servicing. We come to your home or office for convenient car care.',
       services: ['Mobile Servicing', 'Pre-purchase Inspection', 'Roadworthy Certificates', 'Fleet Maintenance', 'Emergency Repairs'],
+    },
+    4: {
+      name: 'D.A.S. Auto Edenvale',
+      rating: 4.7,
+      reviews: 92,
+      distance: '1.5 km',
+      phone: '+27 11 453 0000',
+      email: 'info@dasauto.co.za',
+      address: '123 Van Riebeeck Avenue, Edenvale, 1609',
+      website: 'www.dasauto.co.za',
+      hours: 'Mon-Fri: 8AM-5PM, Sat: 8AM-1PM',
+      description: 'Professional automotive repair and maintenance services. Specializing in diagnostics, servicing, and general repairs for all vehicle makes and models.',
+      services: ['Vehicle Diagnostics', 'General Service', 'Brake Repairs', 'Clutch Repairs', 'Engine Repairs'],
     }
   },
   entertainment: {
