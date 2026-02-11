@@ -75,7 +75,7 @@ Required JSON Response Format:
 Respond with ONLY the JSON object, no additional text.`;
 
     // Call Gemini API
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
@@ -130,7 +130,8 @@ Respond with ONLY the JSON object, no additional text.`;
 });
 
 // Start the server
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Backend server running on http://localhost:${port}`);
   console.log(`API Key configured: ${process.env.GEMINI_API_KEY ? 'Yes' : 'No'}`);
 });
+
